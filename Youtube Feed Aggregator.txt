@@ -1,0 +1,28 @@
+<?php
+//SETTINGS
+$channel_name   =   'XXXXX'; //Youtube Channel ID
+$em_width       =   350; //width of embedded player
+$em_height      =   225; //height of embedded player
+$wrap_class 	=   'video'; //class name for the div wrapper
+$number 	=   20; //number of videos to display on page (max 25)
+//FEED
+$sxml = simplexml_load_file("https://www.youtube.com/feeds/videos.xml?channel_id=$channel_name");
+//OUTPUT
+foreach ($sxml->entry as $entry) {
+  $vidKey = substr(strrchr($entry->id,':'),1);
+  $title = $entry->title;
+  $published = $entry->published;
+  $published = strftime("%B %d, %Y", strtotime($published));
+  $content = $entry->content;
+  ?>
+  	 <div class="<?php echo $wrap_class; ?>">
+		<div class="textbox">
+			<h3><a href="http://www.youtube.com/watch?v=<?php echo $vidKey; ?>" target="blank"><?php echo $title; ?></a></h3>
+			<p class="pubdate">Published: <?php echo $published; ?></p>
+			<p><?php echo $content; ?></p>
+		</div>
+        <iframe width="<?php echo $em_width ?>" height="<?php echo $em_height; ?>" src="http://www.youtube.com/embed/<?php echo $vidKey; ?>?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
+     </div>
+<?php } ?>
+
+<h3><a href="http://www.youtube.com/user/<?php echo $channel_name; ?>?feature=watch" target="_blank">To see ALL our videos, go to the our Youtube page</a></h3>
